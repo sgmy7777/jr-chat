@@ -9,7 +9,16 @@
 <body>
 
 <header>
-  <h1>Online Chat</h1>
+  <div>
+    <h1>Online Chat</h1>
+      <div class="header-menu">
+        <button class="menu-control" id="menuButton"></button>
+        <div class="dropdown-menu" id="headerDropdown">
+          <button class="dropdown-item">Edit name</button>
+          <button class="dropdown-item">Logout</button>
+        </div>
+      </div>
+  </div>
 </header>
 
 <!--
@@ -26,10 +35,11 @@
     <form method="POST" action="/">
       <input type="hidden" name="username" value="guest001" />
       <textarea name="text"></textarea>
-      <button>Отправить</button>
+        <button class="send-button" type="submit" aria-label="Отправить"></button>
     </form>
   </section>
 </main>
+
 
 <script src="./js/index.js"></script>
 

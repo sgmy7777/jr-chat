@@ -34,6 +34,89 @@
 
 
 {
+  /** выпадающее меню */
+  document.addEventListener('DOMContentLoaded', function () {
+    const menuButton = document.getElementById('menuButton');
+    const dropdown = document.getElementById('headerDropdown');
+
+    menuButton.addEventListener('click', function (e) {
+      e.stopPropagation();
+      dropdown.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!dropdown.contains(e.target) && !menuButton.contains(e.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+  });
+
+ /** выпадающее меню сообщения */
+
+    document.addEventListener('click', function(event) {
+        // Проверяем, был ли клик по кнопке управления
+        const controlButton = event.target.closest('[id^="message-menu-"]');
+
+        if (controlButton) {
+            const messageId = controlButton.id.split('-')[2];
+            const menu = document.getElementById(`messageDropdown-${messageId}`);
+
+            // Сначала закрываем все меню
+            document.querySelectorAll('.message-menu.show').forEach(menu => {
+                menu.classList.remove('show');
+            });
+
+            // Потом открываем только нужное меню (если оно было закрыто)
+            if (menu && !menu.classList.contains('show')) {
+                menu.classList.add('show');
+            }
+        } else {
+            // Клик вне кнопки — закрываем все меню
+            document.querySelectorAll('.message-menu.show').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        }
+    });
+
+  /**Цвет сообщения при вызове меню*/
+
+    document.addEventListener('click', function(event) {
+        const controlButton = event.target.closest('[id^="message-menu-"]');
+
+        if (controlButton) {
+            const messageId = controlButton.id.split('-')[2];
+            const menu = document.getElementById(`messageDropdown-${messageId}`);
+            const messageText = document.getElementById(`message-text-${messageId}`);
+
+            // Закрываем все меню и убираем выделение
+            document.querySelectorAll('.message-menu.show').forEach(menu => {
+                menu.classList.remove('show');
+            });
+            document.querySelectorAll('.message-text.highlight-border').forEach(el => {
+                el.classList.remove('highlight-border');
+            });
+
+            // Показываем только текущее меню и выделяем текст
+            if (menu && !menu.classList.contains('show')) {
+                menu.classList.add('show');
+                if (messageText) {
+                    messageText.classList.add('highlight-border');
+                }
+            }
+
+        } else {
+            // Клик вне кнопки — закрываем меню и снимаем выделение
+            document.querySelectorAll('.message-menu.show').forEach(menu => {
+                menu.classList.remove('show');
+            });
+            document.querySelectorAll('.message-text.highlight-border').forEach(el => {
+                el.classList.remove('highlight-border');
+            });
+        }
+    });
+
+  /** сообщения */
+
   const container = document.querySelector(".messages");
 
   function renderMessages(messages) {
@@ -46,9 +129,17 @@
       messageElement.innerHTML = `
         <div class="message-header">
           <div class="message-author">${message.username}</div>
-          <button class="message-control"></button>
+          
+          <button class="message-control" id="message-menu-${message.id}"></button>
+          <div class="message-menu" id="messageDropdown-${message.id}">
+            <button class="dropdown-item">View</button>
+            <button class="dropdown-item">Edit</button>
+            <button class="dropdown-item delete-red">Delete</button>
+            <button class="dropdown-item last-item">Item</button>
+          </div>
+          
         </div>
-        <p class="message-text">${message.text}</p>
+        <p class="message-text" id="message-text-${message.id}">${message.text}</p>
         <time class="message-time">${message.timestamp}</time>
       `;
 
@@ -75,9 +166,23 @@
 
   function initForm() {
     const formContainer = document.querySelector("form");
-
     const formTextField = formContainer.querySelector("textarea");
     const formSubmitButton = formContainer.querySelector("button");
+
+
+      function updateButtonState() {
+          if (formTextField.value.trim() === '') {
+              formSubmitButton.style.visibility = 'hidden';  // Скрыть кнопку
+          } else {
+              formSubmitButton.style.visibility = 'visible';  // Показать кнопку
+          }
+      }
+
+      // Запускать при каждом вводе в textarea
+      formTextField.addEventListener('input', updateButtonState);
+
+      // Проверить состояние при загрузке страницы
+      updateButtonState();
 
     formContainer.onsubmit = function(evt) {
       evt.preventDefault();

@@ -2,71 +2,275 @@ body {
   font: 16px sans-serif;
   padding: 0;
   margin: 0;
+  background: radial-gradient(mediumpurple, #efdef8);
 }
 
 header {
-  background: #000;
-  color: #fff;
-  height: 5vh;
-  padding: 10px 0;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 35px;
+  padding: 10px 20px;
+  background-color: #0a0015;
+  position: relative;
+  margin-bottom: 10px;
 }
 
 header h1 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   font-weight: normal;
+  color: white;
   margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+h1::before {
+  content: "";
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-image: url('../media/Logo.svg');
+  background-size: contain;
+  margin-right: 30px;
+
+}
+.menu-control {
+  background-image: url("../media/Vector.svg");
+  background-color: currentColor;
+  border: none;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 25px;
+  right: 15px;
+  width: 20px;
+  height: 4px;
+  transition: transform 0.1s ease-out;
+}
+
+.menu-control:hover {
+  transform: scale(1.2);
+}
+
+.dropdown-menu {
+  /*display: none;*/
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  top: 60px;
+  right: 15px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  min-width: 80px;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dropdown-item {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+  border-radius: 6px;
 }
 
 .messages {
-  height: 80vh;
-  margin: 0 auto;
   overflow: auto;
-  width: 500px;
+  min-width: 400px;
+  height: calc(100vh - 150px);
+  margin: 0 200px 50px 200px;
 }
 
 .message {
   margin-bottom: 20px;
-  width: 50%;
+  width: 40%;
 }
 
 .message-header {
   display: flex;
   justify-content: space-between;
+  position: relative;
+}
+.message-author {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+
+
+.message-control {
+  background-image: url("../media/Button Icon.svg");
+  width: 30px;
+  background-color: transparent;
+  mask-image: radial-gradient(circle, mediumpurple, #efdef8); /* Градиент в качестве маски */
+  -webkit-mask-image: radial-gradient(circle, mediumpurple, #efdef8); /* Для Safari */
+  background-size: contain;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  transition: transform 0.1s ease-out;
+  position: relative;
+}
+
+.message-control:hover {
+  transform: scale(1.2);
+}
+
+.message-menu {
+  /*display: none;*/
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  width: 150px;
+  top: calc(100% + 5px) ;
+ left: calc(100% + 5px);
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.message-menu.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dropdown-item {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-item.delete-red {
+  color: red;
+}
+.dropdown-item.last-item {
+  border-top: 1px solid lightgray;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+  border-radius: 6px;
 }
 
 .message-text {
   background: #fff;
   border: solid 1px #000;
   border-radius: 10px;
-  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin: 5px 0 0 0;
   padding: 1em;
+
+  max-width: 100%;         /* ограничение по ширине */
+  word-wrap: break-word;   /* перенос длинных слов */
+  overflow-wrap: break-word;
+  box-sizing: border-box;  /* учёт паддинга в ширине */
+}
+
+.highlight-border {
+  border-color: blue !important;
 }
 
 .message-time {
-  color: #999;
-  font-size: 80%;
+  color: #464646;
+  font-size: 60%;
+  margin-left: 5px;
 }
 
 .form form {
   align-items: center;
   bottom: 0;
   display: flex;
-  gap: 20px;
+  gap: 10px;
   justify-content: center;
   height: 5vh;
   padding: 2em;
   position: absolute;
+
   vertical-align: middle;
   width: 100%;
 }
 
 .form textarea {
   font: 16px sans-serif;
-  height: 1em;
+  border-radius: 10px;
+  height: 1.4em;
   padding: 0.5em;
-  width: 30em;
+  /*width: 50em;*/
+  width: calc(100% - 400px);
+
 }
 
-.form button {
-  font: 16px sans-serif;
+  .form button {
+    font-size: 0;
+    background-image: url("../media/Send.svg");
+    background-color: transparent;
+    mask-image: radial-gradient(circle, mediumpurple, #efdef8); /* Градиент в качестве маски */
+    -webkit-mask-image: radial-gradient(circle, mediumpurple, #efdef8); /* Для Safari */
+    border: none;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    width: 35px;
+    height: 35px;
+    transition: transform 0.1s ease-out;
+  }
+
+  .form button:hover {
+    transform: scale(1.2);
+  }
+
+/*медиа запросы*/
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 16px;
+  }
+
+  h1::before {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
+
+  .menu-control {
+    top: 20px;
+    right: 10px;
+    width: 18px;
+    height: 3px;
+    background-size: contain;
+  }
+}
+
+@media (max-width: 400px) {
+  header h1 {
+    font-size: 0; /* Скрыть текст */
+  }
+
+  h1::before {
+    margin: 0; /* Центрировать только иконку */
+  }
 }
