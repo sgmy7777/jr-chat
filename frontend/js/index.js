@@ -120,7 +120,10 @@
   const container = document.querySelector(".messages");
 
   function renderMessages(messages) {
-    container.innerHTML = "";
+      const isScrolledToBottom =
+        container.scrollHeight - container.scrollTop <= container.clientHeight + 5; // Проверяем, находится ли пользователь внизу
+
+      container.innerHTML = "";
 
     for (const message of messages) {
       const messageElement = document.createElement("article");
@@ -145,6 +148,9 @@
 
       container.appendChild(messageElement);
     }
+      if (isScrolledToBottom) {
+      container.scrollTop = container.scrollHeight;
+      } //прокрутка сообщений в самый низ
   }
 
   function getMessages() {
