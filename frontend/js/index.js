@@ -184,6 +184,25 @@
       // Проверить состояние при загрузке страницы
       updateButtonState();
 
+      /** Отправка сообщения нажатием на enter*/
+
+      const form = document.querySelector("form");
+      const textarea = form.querySelector("textarea");
+
+      form.addEventListener("submit", function (event) {
+          // Позволим отправку формы как обычно (если хотите перехватить — используйте preventDefault)
+          // В вашем случае, возможно, оставить как есть
+      });
+
+      textarea.addEventListener("keydown", function (event) {
+          if (event.key === "Enter" && !event.shiftKey) {
+              event.preventDefault(); // предотвращаем перевод строки
+              form.requestSubmit();   // имитирует клик по кнопке отправки (HTML5)
+          }
+      });
+
+      /**--------*/
+
     formContainer.onsubmit = function(evt) {
       evt.preventDefault();
       const formData = new FormData(evt.target);
@@ -223,6 +242,7 @@
 
   function initChat() {
     getMessages();
+    setInterval(getMessages, 3000);
     initForm();
   }
 
