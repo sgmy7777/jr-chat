@@ -121,7 +121,7 @@
 
   function renderMessages(messages) {
       const isScrolledToBottom =
-        container.scrollHeight - container.scrollTop <= container.clientHeight + 5; // Проверяем, находится ли пользователь внизу
+        container.scrollHeight - container.scrollTop <= container.clientHeight + 50; // Проверяем, находится ли пользователь внизу
 
       container.innerHTML = "";
 
@@ -241,6 +241,7 @@
           formSubmitButton.disabled = false;
           formSubmitButton.textContent = "Отправить";
 
+          formTextField.focus() // поле ввода активно после отправки сообщения
           getMessages();
         });
     }
