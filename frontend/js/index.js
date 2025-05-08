@@ -149,7 +149,10 @@
       container.appendChild(messageElement);
     }
       if (isScrolledToBottom || forceScroll) {
-      container.scrollTop = container.scrollHeight;
+          container.scrollTo({
+              top: container.scrollHeight,
+              behavior: "smooth"
+          });
       } //прокрутка сообщений в самый низ
   }
 
