@@ -119,7 +119,7 @@
 
   const container = document.querySelector(".messages");
 
-  function renderMessages(messages) {
+  function renderMessages(messages, forceScroll = false) {
       const isScrolledToBottom =
         container.scrollHeight - container.scrollTop <= container.clientHeight + 50; // Проверяем, находится ли пользователь внизу
 
@@ -148,12 +148,12 @@
 
       container.appendChild(messageElement);
     }
-      if (isScrolledToBottom) {
+      if (isScrolledToBottom || forceScroll) {
       container.scrollTop = container.scrollHeight;
       } //прокрутка сообщений в самый низ
   }
 
-  function getMessages() {
+  function getMessages(forceScroll = false) {
     fetch("http://localhost:4000/messages", {
       method: "GET",
     })
@@ -166,7 +166,7 @@
       })
       .then(function (messagesList) {
         console.log(messagesList);
-        renderMessages(messagesList);
+        renderMessages(messagesList, forceScroll);
       });
   }
 
@@ -242,7 +242,7 @@
           formSubmitButton.textContent = "Отправить";
 
           formTextField.focus() // поле ввода активно после отправки сообщения
-          getMessages();
+          getMessages(true);
         });
     }
   }
