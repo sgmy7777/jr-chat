@@ -118,11 +118,12 @@
   /** сообщения */
 
   const container = document.querySelector(".messages");
+    const indicator = document.getElementById("new-message-indicator"); // NEW
 
   function renderMessages(messages, forceScroll = false) {
       const isScrolledToBottom =
         container.scrollHeight - container.scrollTop <= container.clientHeight + 50; // Проверяем, находится ли пользователь внизу
-
+      const prevScrollHeight = container.scrollHeight; // NEW
       container.innerHTML = "";
 
     for (const message of messages) {
@@ -144,17 +145,38 @@
         </div>
         <p class="message-text" id="message-text-${message.id}">${message.text}</p>
         <time class="message-time">${message.timestamp}</time>
+        
       `;
 
       container.appendChild(messageElement);
     }
       if (isScrolledToBottom || forceScroll) {
-          container.scrollTo({
-              top: container.scrollHeight,
-              behavior: "smooth"
-          });
-      } //прокрутка сообщений в самый низ
+          container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+          indicator.style.display = "none";
+      } else {
+          // если появилось новое содержимое и пользователь не внизу — показать индикатор
+          if (container.scrollHeight > prevScrollHeight) {
+              indicator.style.display = "block";
+          }
+      } //прокрутка сообщений в самый низ NEWNEWNEW
   }
+
+  /** Клик по индикатору новых сообщений */
+  indicator.addEventListener("click", () => {
+      container.scrollTo({
+          top: container.scrollHeight,
+          behavior: "smooth"
+      });
+      indicator.style.display = "none";
+  });
+  /** Спрятать индикатор при прокрутке в самый низ */
+  container.addEventListener("scroll", () => {
+      const nearBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
+      if (nearBottom) {
+          indicator.style.display = "none";
+      }
+  });
+  /** */
 
   function getMessages(forceScroll = false) {
     fetch("http://localhost:4000/messages", {

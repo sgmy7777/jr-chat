@@ -31,6 +31,23 @@
 <main>
   <section class="messages"></section>
 
+  <div id="new-message-indicator" style="
+  position: fixed;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #007bff;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: none;
+  z-index: 1000;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);">
+    Новые сообщения ↓
+  </div>
+
   <section class="form">
     <form method="POST" action="/">
       <input type="hidden" name="username" value="guest001" />
