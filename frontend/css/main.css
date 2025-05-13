@@ -5,6 +5,204 @@ body {
   background: radial-gradient(mediumpurple, #efdef8);
 }
 
+/** Форма Login */
+
+.containerLogin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: radial-gradient(circle at center, #66207a 0%, #3a1063 50%, #220d5a 100%);
+  padding: 15px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 350px;
+}
+
+.logo {
+  margin-bottom: 20px;
+}
+
+.title {
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.login-form {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #565656;
+}
+
+.form-group input {
+  width: 93%;
+  padding: 12px;
+  /*border: 1px solid #e0e0e0;*/
+  border: none;
+  border-radius: 5px;
+  background-color: #e7e6e6;
+  font-size: 16px;
+}
+
+.join-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1a0023;
+  color: white;
+  font-size: 16px;
+  font-weight: normal;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.join-button:hover {
+  background-color: #2b0040;
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .login-form {
+    padding: 25px;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .login-form {
+    padding: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group input {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .join-button {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 320px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .login-form {
+    padding: 15px;
+  }
+}
+
+/** --- */
+/* Дополнительные стили для чата с аутентификацией */
+
+/*!* Скрываем чат при загрузке страницы *!*/
+/*main, header {*/
+/*  display: none;*/
+/*}*/
+
+/*!* Стили для различных типов сообщений *!*/
+/*.own-message {*/
+/*  margin-left: auto;*/
+/*  margin-right: 10px;*/
+/*}*/
+
+/*.other-message {*/
+/*  margin-right: auto;*/
+/*  margin-left: 10px;*/
+/*}*/
+
+/*!* Стили для сообщений пользователя (справа) *!*/
+/*.own-message .message-text {*/
+/*  background-color: #e6f2ff;*/
+/*  border-color: #b3d9ff;*/
+/*}*/
+
+/* Имя пользователя в правом верхнем углу */
+.dropdown-menu .username-display {
+  padding: 10px 20px;
+  font-weight: bold;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: center;
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+  .messages {
+    margin: 0 50px 50px 50px;
+  }
+
+  .message {
+    width: 60%;
+  }
+
+  .form textarea {
+    width: calc(100% - 150px);
+  }
+}
+
+@media (max-width: 480px) {
+  .messages {
+    margin: 0 20px 50px 20px;
+    min-width: unset;
+  }
+
+  .message {
+    width: 75%;
+  }
+
+  .form textarea {
+    width: calc(100% - 100px);
+  }
+}
+/** --- */
+
 header {
   display: flex;
   justify-content: space-between;
@@ -136,20 +334,20 @@ h1::before {
   transform: scale(1.2);
 }
 
-.message-menu {
-  /*display: none;*/
-  position: absolute;
-  opacity: 0;
-  visibility: hidden;
-  background: white;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  z-index: 100;
-  width: 150px;
-  top: calc(100% + 5px) ;
-  left: calc(100% + 5px);
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-}
+/*.message-menu {*/
+/*  !*display: none;*!*/
+/*  position: absolute;*/
+/*  opacity: 0;*/
+/*  visibility: hidden;*/
+/*  background: white;*/
+/*  border-radius: 6px;*/
+/*  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);*/
+/*  z-index: 1008;*/
+/*  width: 150px;*/
+/*  top: calc(100% + 5px) ;*/
+/*  left: calc(100% + 5px);*/
+/*  transition: opacity 0.2s ease, visibility 0.2s ease;*/
+/*}*/
 
 .message-menu.show {
   opacity: 1;

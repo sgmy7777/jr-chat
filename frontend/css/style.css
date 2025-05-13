@@ -1,0 +1,454 @@
+/* Base body styles */
+body {
+    font: 16px sans-serif;
+    padding: 0;
+    margin: 0;
+    background: radial-gradient(mediumpurple, #efdef8);
+}
+
+/* ===== Login Form Styles ===== */
+.containerLogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: radial-gradient(circle at center, #66207a 0%, #3a1063 50%, #220d5a 100%);
+    padding: 15px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 350px;
+}
+
+.logo {
+    margin-bottom: 20px;
+}
+
+.title {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.login-form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 100%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #565656;
+}
+
+.form-group input {
+    width: 93%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #e7e6e6;
+    font-size: 16px;
+}
+
+.join-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1a0023;
+    color: white;
+    font-size: 16px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.join-button:hover {
+    background-color: #2b0040;
+}
+
+/* ===== Header Styles ===== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 35px;
+    padding: 10px 20px;
+    background-color: #0a0015;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+header h1 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: normal;
+    color: white;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1::before {
+    content: "";
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url('../media/Logo.svg');
+    background-size: contain;
+    margin-right: 30px;
+}
+
+/* ===== Chat Container Styles ===== */
+/* Hide chat on page load */
+main, header {
+    display: none;
+}
+
+/* Message layout styles */
+.messages {
+    overflow: auto;
+    min-width: 400px;
+    height: calc(100vh - 150px);
+    margin: 0 200px 50px 200px;
+}
+
+.message {
+    margin-bottom: 20px;
+    width: 40%;
+}
+
+.own-message {
+    margin-left: auto;
+}
+
+.other-message {
+    margin-right: auto;
+}
+
+/* Message styling */
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.message-author {
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.message-time {
+    color: #464646;
+    font-size: 60%;
+    margin-left: 5px;
+}
+
+.message-text {
+    background: #fff;
+    border: solid 1px #000;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin: 5px 0 0 0;
+    padding: 1em;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+}
+
+/* Style for user's own messages */
+.own-message .message-text {
+    background-color: #e6f2ff;
+    border-color: #b3d9ff;
+}
+
+.highlight-border {
+    border-color: blue !important;
+}
+
+/* ===== Dropdown Menu Styles ===== */
+.menu-control {
+    background-image: url("../media/Vector.svg");
+    background-color: currentColor;
+    border: none;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 25px;
+    right: 15px;
+    width: 20px;
+    height: 4px;
+    transition: transform 0.1s ease-out;
+}
+
+.menu-control:hover {
+    transform: scale(1.2);
+}
+
+.dropdown-menu {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    top: 60px;
+    right: 15px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    width: 150px;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.dropdown-menu .username-display {
+    padding: 10px 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+}
+
+.dropdown-item {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+    border-radius: 6px;
+}
+
+.dropdown-item.delete-red {
+    color: red;
+}
+
+.dropdown-item.last-item {
+    border-top: 1px solid lightgray;
+}
+
+/* ===== Message Controls ===== */
+.message-control {
+    background-image: url("../media/Button Icon.svg");
+    width: 30px;
+    background-color: transparent;
+    mask-image: radial-gradient(circle, mediumpurple, #efdef8);
+    -webkit-mask-image: radial-gradient(circle, mediumpurple, #efdef8);
+    background-size: contain;
+    background-position: center;
+    border: none;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    transition: transform 0.1s ease-out;
+    position: relative;
+    z-index: 1005;
+}
+
+.message-control:hover {
+    transform: scale(1.2);
+}
+
+/* Message menu positioning */
+.message-menu {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1008;
+    width: 130px;
+    top: calc(100% + 5px);
+    left: calc(100% + 5px);
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* For own messages (aligned right), menu is positioned to the left */
+.own-message .message-menu {
+    left: auto;
+    right: calc(100% + 5px);
+}
+
+.message-menu.show {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1010;
+}
+
+/* ===== Form Styles ===== */
+.form form {
+    align-items: center;
+    bottom: 0;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    height: 5vh;
+    padding: 2em;
+    position: absolute;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.form textarea {
+    font: 16px sans-serif;
+    border-radius: 10px;
+    height: 1.4em;
+    padding: 0.5em;
+    width: calc(100% - 400px);
+}
+
+.form button {
+    font-size: 0;
+    background-image: url("../media/Send.svg");
+    background-color: transparent;
+    mask-image: radial-gradient(circle, mediumpurple, #efdef8);
+    -webkit-mask-image: radial-gradient(circle, mediumpurple, #efdef8);
+    border: none;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    width: 35px;
+    height: 35px;
+    transition: transform 0.1s ease-out;
+}
+
+.form button:hover {
+    transform: scale(1.2);
+}
+
+/* ===== Responsive Styles ===== */
+/* Login form responsiveness */
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+    }
+
+    .login-form {
+        padding: 25px;
+    }
+
+    .title {
+        font-size: 2rem;
+        margin-bottom: 25px;
+    }
+
+    .messages {
+        margin: 0 50px 50px 50px;
+    }
+
+    .message {
+        width: 60%;
+    }
+
+    .form textarea {
+        width: calc(100% - 150px);
+    }
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 16px;
+    }
+
+    h1::before {
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+    }
+
+    .menu-control {
+        top: 20px;
+        right: 10px;
+        width: 18px;
+        height: 3px;
+        background-size: contain;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 15px;
+    }
+
+    .title {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+
+    .login-form {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group input {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .join-button {
+        padding: 12px;
+        font-size: 15px;
+    }
+
+    .messages {
+        margin: 0 20px 50px 20px;
+        min-width: unset;
+    }
+
+    .message {
+        width: 75%;
+    }
+
+    .form textarea {
+        width: calc(100% - 100px);
+    }
+}
+
+@media (max-width: 400px) {
+    header h1 {
+        font-size: 0; /* Hide text */
+    }
+
+    h1::before {
+        margin: 0; /* Center icon only */
+    }
+}
+
+@media (max-width: 320px) {
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .login-form {
+        padding: 15px;
+    }
+}
