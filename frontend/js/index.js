@@ -221,14 +221,13 @@
       const textarea = form.querySelector("textarea");
 
       form.addEventListener("submit", function (event) {
-          // Позволим отправку формы как обычно (если хотите перехватить — используйте preventDefault)
-          // В вашем случае, возможно, оставить как есть
+          // Позволим отправку формы как обычно
       });
 
       textarea.addEventListener("keydown", function (event) {
           if (event.key === "Enter" && !event.shiftKey) {
               event.preventDefault(); // предотвращаем перевод строки
-              form.requestSubmit();   // имитирует клик по кнопке отправки (HTML5)
+              form.requestSubmit();   // имитирует клик по кнопке отправки
           }
       });
 
