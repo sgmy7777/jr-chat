@@ -1,0 +1,38 @@
+name: "jr-chat"
+services:
+  frontend:
+    depends_on:
+      - "backend"
+    image: my-frontend
+    build:
+      context: ./frontend
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./frontend:/app
+
+  backend:
+    image: my-backend
+    build:
+      context: ./backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - shared:/shared
+
+  database:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=jrchatus
+    ports:
+      - "5433:5432"
+    volumes:
+      - shared:/shared
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  shared:
+  db-data:
+

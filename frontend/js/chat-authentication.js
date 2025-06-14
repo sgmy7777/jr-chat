@@ -12,7 +12,7 @@ const ChatAuth = (function() {
     const headerElement = document.querySelector('header');
     const usernameInput = document.getElementById('username');
     const joinButton = document.querySelector('.join-button');
-    const usernameDisplay = document.querySelector('.username-display');
+    // const usernameDisplay = document.querySelector('.username-display');
 
     // Проверка авторизации при загрузке страницы
     function checkAuthentication() {
