@@ -24,8 +24,8 @@ services:
     image: postgres
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=12345
-      - POSTGRES_DB=jrchatus
+      - POSTGRES_PASSWORD=1234567899
+      - POSTGRES_DB=jr-chat
     ports:
       - "5433:5432"
     volumes:
