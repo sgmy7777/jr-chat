@@ -1,7 +1,11 @@
-
 {
-  "defaultEnv": "pg",
-  "pg": {
-    "driver": "pg"
+  "dev": {
+    "driver": "pg",
+    "user": "postgres",
+    "password": "1234567899",
+    "host": "localhost",
+    "database": "jr-chat",
+    "port": 5433,
+    "schema": "public"
   }
 }
