@@ -1,0 +1,7 @@
+
+{
+  "defaultEnv": "pg",
+  "pg": {
+    "driver": "pg"
+  }
+}

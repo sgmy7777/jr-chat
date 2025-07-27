@@ -11,7 +11,7 @@ type Message = {
   "timestamp": string,
 };
 
-const client = new Client();
+const pgClient = new Client();
 
 const server = express();
 
@@ -118,7 +118,7 @@ async function initServer() {
     res.status(201).send(newMessage);
   });
 
-  await client.connect();
+  await pgClient.connect();
 
   server.listen(PORT, function () {
     console.log(`[server]: Server is running at http://localhost:${PORT}`);
@@ -126,7 +126,7 @@ async function initServer() {
 }
 
 process.on("exit", async function () {
-  await client.end();
+  await pgClient.end();
 });
 
 initServer();

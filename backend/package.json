@@ -7,7 +7,9 @@
     "build": "npx tsc",
     "start": "npx tsc && dotenvx run -f .env -- node dist/index.js",
     "dev": "dotenvx run -f .env -- npx tsx watch src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate:up": "npx db-migrate up",
+    "migrate:down": "npx db-migrate down"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +17,8 @@
     "@dotenvx/dotenvx": "^1.48.3",
     "@types/express": "^5.0.1",
     "@types/pg": "^8.15.4",
+    "db-migrate": "^0.11.14",
+    "db-migrate-pg": "^1.5.2",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3"
   },
