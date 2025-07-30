@@ -21,19 +21,10 @@ const pgClient = new Client();
 const server = express();
 
 
-function* infiniteSequence() {
-  let i = 0;
-  while (true) {
-    yield ++i;
-  }
-}
-
 async function initServer() {
   if (!process.env.PGUSER) {
     throw new Error("Server cannot be started without database credentials provided in .env file");
   }
-
-  const idIterator = infiniteSequence();
 
   server.use(cors());
   server.use(express.json());
