@@ -21,8 +21,6 @@ const pgClient = new Client();
 const server = express();
 
 
-const messages:Message[] = [];
-
 function* infiniteSequence() {
   let i = 0;
   while (true) {
@@ -46,14 +44,20 @@ async function initServer() {
 
   server.get("/users", async function(req: Request, res: Response) {
     const usersResponse = await pgClient.query("SELECT * FROM users");
-    res.status(200).send(usersResponse.rows);
+    res.status(200).send(usersResponse.rows as User[]);
   });
 
-  server.get("/messages", function (req: Request, res: Response) {
-    res.status(200).json([...messages]);
+  server.get("/messages", async function (req: Request, res: Response) {
+    const messagesResponse = await pgClient.query(`SELECT 
+      message_id as id,
+      user_id as username,
+      text,
+      created_at as timestamp
+    FROM messages`);
+    res.status(200).send(messagesResponse.rows as Message[]);
   });
 
-  server.post("/messages", function (req: Request, res: Response) {
+  server.post("/messages", async function (req: Request, res: Response) {
     const {username, text} = req.body;
 
 
@@ -113,20 +117,18 @@ async function initServer() {
       return;
     }
 
-    const newMessage = {
-      id: idIterator.next().value as number,
-      text,
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      }),
-      username,
-    };
+    try {
+      const newMessageResponse = await pgClient.query(`INSERT INTO messages(text,
+                                                                            user_id)
+                                                       VALUES ('${text}',
+                                                               ${1 + Math.floor(Math.random() * 3)})`);
 
-    messages.push(newMessage);
-    res.status(201).send(newMessage);
+      res.sendStatus(201);
+    } catch (err) {
+      res.sendStatus(500);
+    }
   });
+
 
   await pgClient.connect();
 
