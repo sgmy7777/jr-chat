@@ -38,13 +38,28 @@ async function initServer() {
   server.use(cors());
   server.use(express.json());
 
+  async function getUsers() {
+    const usersResponse = await pgClient.query("SELECT * FROM users");
+    return usersResponse.rows as User[];
+  }
+
+  async function getUser(userId: number) {
+    const usersResponse = await pgClient.query(`SELECT * FROM users WHERE user_id = ${userId}`);
+
+    if (usersResponse.rows.length > 0) {
+      return usersResponse.rows[0] as User;
+    }
+
+    return null;
+  }
+
   server.get("/", function (req: Request, res: Response) {
     res.status(200).json("Hello from backend");
   });
 
   server.get("/users", async function(req: Request, res: Response) {
-    const usersResponse = await pgClient.query("SELECT * FROM users");
-    res.status(200).send(usersResponse.rows as User[]);
+    const usersResponse = await getUsers();
+    res.status(200).send(usersResponse);
   });
 
   server.get("/messages", async function (req: Request, res: Response) {
@@ -60,7 +75,15 @@ async function initServer() {
   });
 
   server.post("/messages", async function (req: Request, res: Response) {
-    const {username, text} = req.body;
+    const { user_id, text } = req.body;
+    if (await getUser(user_id) === null) {
+      res.status(401).send({
+        message: "Incorrect username",
+      });
+
+
+      return;
+    }
 
 
     function validateInput(username: unknown, text: unknown) {
@@ -113,7 +136,7 @@ async function initServer() {
       return null;
     }
 
-    const error = validateInput(username, text);
+    const error = validateInput(user_id, text);
     if (error) {
       res.status(400).send({message: error.message});
       return;
@@ -123,7 +146,7 @@ async function initServer() {
       const newMessageResponse = await pgClient.query(`INSERT INTO messages(text,
                                                                             user_id)
                                                        VALUES ('${text}',
-                                                               ${1 + Math.floor(Math.random() * 3)})`);
+                                                               ${user_id})`);
 
       res.sendStatus(201);
     } catch (err) {
