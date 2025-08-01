@@ -179,7 +179,7 @@ async function initServer() {
                                                        messages.message_id AS id,
                                                        users.username AS username,
                                                        messages.text AS text,
-                                                       messages.created_at AS timestamp
+                                                       TO_CHAR(messages.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS timestamp
                                                      FROM messages
                                                             LEFT JOIN users ON messages.user_id = users.user_id
                                                      ORDER BY messages.created_at ASC`);
