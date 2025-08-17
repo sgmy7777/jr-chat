@@ -1,0 +1,96 @@
+
+
+/* Скрываем чат при загрузке страницы */
+main, header {
+    display: none;
+}
+
+/* Стили для различных типов сообщений */
+.own-message {
+    margin-left: auto;
+    /*margin-right: 10px;*/
+}
+
+.other-message {
+    margin-right: auto;
+    /*margin-left: 10px;*/
+}
+
+/* Стили для сообщений пользователя (справа) */
+.own-message .message-text {
+    background-color: #e6f2ff;
+    border-color: #b3d9ff;
+}
+
+/* Имя пользователя в правом верхнем углу */
+.dropdown-menu .username-display {
+    padding: 10px 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+    .messages {
+        margin: 0 50px 50px 50px;
+    }
+
+    .message {
+        width: 60%;
+    }
+
+    .form textarea {
+        width: calc(100% - 150px);
+    }
+}
+
+@media (max-width: 480px) {
+    .messages {
+        margin: 0 20px 50px 20px;
+        min-width: unset;
+    }
+
+    .message {
+        width: 75%;
+    }
+
+    .form textarea {
+        width: calc(100% - 100px);
+    }
+}
+
+
+/* Стандартная позиция меню сообщений (для чужих сообщений) */
+.message-menu {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1008;
+    width: 130px;
+    top: calc(100% + 5px);
+    left: calc(100% + 5px); /* Позиция по умолчанию: справа */
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* Для собственных сообщений (выровненных справа), меню позиционируется слева */
+.own-message .message-menu {
+    left: auto; /* Сбрасываем свойство left */
+    right: calc(100% + 5px); /* Позиционируем слева от кнопки */
+}
+
+/* Убеждаемся, что меню сообщений находится поверх других элементов */
+.message-menu.show {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1010; /* Увеличиваем z-index, чтобы меню появлялось поверх всех элементов */
+}
+
+/* Убеждаемся, что кнопки управления сообщениями видимы и кликабельны */
+.message-control {
+    z-index: 1005;
+    position: relative;
+}
