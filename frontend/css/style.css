@@ -155,6 +155,10 @@ main, header {
     margin-left: 5px;
 }
 
+.message-author-deleted {
+    color: #ccc;
+}
+
 .message-time {
     color: #464646;
     font-size: 60%;

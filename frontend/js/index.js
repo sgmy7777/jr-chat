@@ -1,6 +1,30 @@
 // Modified index.js with user authentication and message alignment
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Создаем форматтер один раз для оптимизации производительности
+    const dateFormatter = new Intl.DateTimeFormat('en-CA', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone // Локальный часовой пояс
+    });
+
+    // Функция для форматирования времени в локальном часовом поясе пользователя
+    function formatTimestamp(timestamp) {
+        const date = new Date(timestamp);
+
+        // Используем предварительно созданный форматтер
+        const formatted = dateFormatter.format(date);
+
+        // Intl.DateTimeFormat с локалью 'en-CA' возвращает формат: YYYY-MM-DD, HH:MM:SS
+        // Заменяем запятую на пробел для нужного формата
+        return formatted.replace(',', '');
+    }
+
     // Инициализация модуля аутентификации
     if (typeof ChatAuth !== 'undefined') {
         ChatAuth.init();
@@ -10,18 +34,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const menuButton = document.getElementById('menuButton');
     const dropdown = document.getElementById('headerDropdown');
 
-    menuButton.addEventListener('click', function(e) {
-        e.stopPropagation();
-        dropdown.classList.toggle('show');
-    });
+    if (menuButton && dropdown) {
+        menuButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('show');
+        });
 
-    document.addEventListener('click', function(e) {
-        if (!dropdown.contains(e.target) && !menuButton.contains(e.target)) {
-            dropdown.classList.remove('show');
-        }
-    });
+        document.addEventListener('click', function(e) {
+            if (!dropdown.contains(e.target) && !menuButton.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+    }
 
     /** выпадающее меню сообщения */
+        // Хранит информацию об открытых меню
+    let openMenuId = null;
+    let highlightedMessageId = null;
+
     // Единый обработчик для управления меню сообщений
     document.addEventListener('click', function(event) {
         // Проверяем, был ли клик по кнопке управления
@@ -77,10 +107,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.querySelector(".messages");
     const indicator = document.getElementById("new-message-indicator");
 
-    // Хранит информацию об открытых меню
-    let openMenuId = null;
-    let highlightedMessageId = null;
-
     function renderMessages(messages, forceScroll = false) {
         // Проверяем, что messages - это массив
         if (!Array.isArray(messages)) {
@@ -121,7 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const messageId = message.id || Math.random().toString(36).substring(2, 9);
             const username = message.username || "unknown";
             const text = message.text || "";
-            const timestamp = message.timestamp || new Date().toLocaleString();
+            // Используем новую функцию форматирования времени
+            const timestamp = message.timestamp ? formatTimestamp(message.timestamp) : formatTimestamp(new Date().toISOString());
 
             const messageElement = document.createElement("article");
             messageElement.className = "message";
@@ -137,51 +164,55 @@ document.addEventListener('DOMContentLoaded', function() {
             const messageTextId = `message-text-${messageId}`;
 
             messageElement.innerHTML = `
-        <div class="message-header">
-          <div class="message-author">${username}</div>
-          
-          <button class="message-control" id="message-menu-${messageId}"></button>
-          <div class="message-menu${openMenuId === dropdownId ? ' show' : ''}" id="${dropdownId}">
-            <button class="dropdown-item">View</button>
-            <button class="dropdown-item">Edit</button>
-            <button class="dropdown-item delete-red">Delete</button>
-            <button class="dropdown-item last-item">Item</button>
-          </div>
-        </div>
-        <p class="message-text${highlightedMessageId === messageTextId ? ' highlight-border' : ''}" id="${messageTextId}">${text}</p>
-        <time class="message-time">${timestamp}</time>
-      `;
+                <div class="message-header">
+                    <div class="message-author">${message.username ?? `<span class="message-author-deleted">✖️ Пользователь удален</span>`}</div>
+                    
+                    <button class="message-control" id="message-menu-${messageId}"></button>
+                    <div class="message-menu${openMenuId === dropdownId ? ' show' : ''}" id="${dropdownId}">
+                        <button class="dropdown-item">View</button>
+                        <button class="dropdown-item">Edit</button>
+                        <button class="dropdown-item delete-red">Delete</button>
+                        <button class="dropdown-item last-item">Item</button>
+                    </div>
+                </div>
+                <p class="message-text${highlightedMessageId === messageTextId ? ' highlight-border' : ''}" id="${messageTextId}">${text}</p>
+                <time class="message-time">${timestamp}</time>
+            `;
 
             container.appendChild(messageElement);
         }
 
         if (isScrolledToBottom || forceScroll) {
             container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
-            indicator.style.display = "none";
+            if (indicator) indicator.style.display = "none";
         } else {
             // если появилось новое содержимое и пользователь не внизу — показать индикатор
-            if (container.scrollHeight > prevScrollHeight) {
+            if (container.scrollHeight > prevScrollHeight && indicator) {
                 indicator.style.display = "block";
             }
         }
     }
 
     /** Клик по индикатору новых сообщений */
-    indicator.addEventListener("click", () => {
-        container.scrollTo({
-            top: container.scrollHeight,
-            behavior: "smooth"
+    if (indicator) {
+        indicator.addEventListener("click", () => {
+            container.scrollTo({
+                top: container.scrollHeight,
+                behavior: "smooth"
+            });
+            indicator.style.display = "none";
         });
-        indicator.style.display = "none";
-    });
+    }
 
     /** Спрятать индикатор при прокрутке в самый низ */
-    container.addEventListener("scroll", () => {
-        const nearBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
-        if (nearBottom) {
-            indicator.style.display = "none";
-        }
-    });
+    if (container) {
+        container.addEventListener("scroll", () => {
+            const nearBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
+            if (nearBottom && indicator) {
+                indicator.style.display = "none";
+            }
+        });
+    }
 
     function getMessages(forceScroll = false) {
         fetch("http://localhost:4000/messages", {
@@ -217,15 +248,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function initForm() {
         const formContainer = document.querySelector("form");
-        const formTextField = formContainer.querySelector("textarea");
-        const formSubmitButton = formContainer.querySelector("button");
+        const formTextField = formContainer?.querySelector("textarea");
+        const formSubmitButton = formContainer?.querySelector("button");
 
-        // При инициализации формы устанавливаем текущее имя пользователя
-        if (ChatAuth) {
-            const usernameField = formContainer.querySelector('input[name="username"]');
-            if (usernameField) {
-                usernameField.value = ChatAuth.getUsername() || 'guest001';
-            }
+        if (!formContainer || !formTextField || !formSubmitButton) {
+            console.error("Form elements not found");
+            return;
         }
 
         function updateButtonState() {
@@ -259,19 +287,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
         formContainer.onsubmit = function(evt) {
             evt.preventDefault();
-            const formData = new FormData(evt.target);
 
-            const messageData = {
-                username: formData.get("username"),
-                text: formData.get("text"),
-            };
-
-            if (!messageData.text.trim()) {
-                return; // Не отправляем пустые сообщения
+            // Проверяем авторизацию
+            if (!ChatAuth || !ChatAuth.isAuthenticated()) {
+                alert('Please log in to send messages');
+                return;
             }
 
-            // Сохраняем текст сообщения перед отправкой
-            const messageText = messageData.text;
+            const formData = new FormData(evt.target);
+            const messageText = formData.get("text");
+
+            // Получаем user_id из ChatAuth
+            const userId = ChatAuth.getUserId();
+
+            if (!userId) {
+                alert('User ID not found. Please log in again.');
+                ChatAuth.logout();
+                return;
+            }
+
+            const messageData = {
+                user_id: userId,
+                text: messageText,
+            };
+
+            if (!messageData.text || !messageData.text.trim()) {
+                return; // Не отправляем пустые сообщения
+            }
 
             // Очищаем поле ввода сразу же
             formTextField.value = "";
@@ -289,15 +331,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(messageData),
             })
                 .then(function(newMessageResponse) {
-                    console.log(newMessageResponse.status);
+                    console.log("Message sent, status:", newMessageResponse.status);
 
                     // Разблокируем форму в любом случае
                     formTextField.disabled = false;
                     formSubmitButton.disabled = false;
                     formTextField.focus(); // поле ввода активно после отправки сообщения
 
-                    // Обновляем список сообщений
-                    getMessages(true);
+                    if (newMessageResponse.status === 201) {
+                        // Обновляем список сообщений при успешной отправке
+                        getMessages(true);
+                    } else if (newMessageResponse.status === 401) {
+                        alert('Authentication error. Please log in again.');
+                        ChatAuth.logout();
+                    } else {
+                        console.warn("Unexpected response status:", newMessageResponse.status);
+                        // Восстанавливаем текст сообщения
+                        formTextField.value = messageData.text;
+                        updateButtonState();
+                    }
                 })
                 .catch(function(error) {
                     console.error("Error sending message:", error);
@@ -307,21 +359,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     formSubmitButton.disabled = false;
 
                     // Восстанавливаем текст сообщения, если отправка не удалась
-                    formTextField.value = messageText;
+                    formTextField.value = messageData.text;
                     updateButtonState(); // Обновляем состояние кнопки отправки
 
-                    // Выводим ошибку в консоль, но не показываем пользователю
-                    // alert("Failed to send message. Please try again.");
+                    alert("Failed to send message. Please try again.");
                 });
         };
     }
 
     function initChat() {
         // Проверяем, авторизован ли пользователь
-        if (ChatAuth && !ChatAuth.isAuthenticated()) {
+        if (!ChatAuth || !ChatAuth.isAuthenticated()) {
             // Не инициализируем чат, если пользователь не авторизован
+            console.log("User not authenticated, skipping chat initialization");
             return;
         }
+
+        console.log("Initializing chat for user:", ChatAuth.getUsername(), "ID:", ChatAuth.getUserId());
 
         getMessages();
 
@@ -341,8 +395,11 @@ document.addEventListener('DOMContentLoaded', function() {
         initForm();
     }
 
+    // Делаем initChat доступной глобально для вызова из ChatAuth
+    window.initChat = initChat;
+
     // Инициализируем чат только если пользователь авторизован
-    if (!ChatAuth || ChatAuth.isAuthenticated()) {
+    if (ChatAuth && ChatAuth.isAuthenticated()) {
         initChat();
     }
 });
